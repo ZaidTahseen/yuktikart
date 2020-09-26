@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
-const multer = require('multer');
+// const multer = require('multer');
 
 
 //Use body Parser in file
@@ -83,7 +83,7 @@ mongoose.connect('mongodb+srv://ekart:ekart123@cluster0.sibkp.mongodb.net/<dbnam
         console.log('DB Connected')
         const port = process.env.PORT || 3000;
         app.listen(port, () => {
-            console.log('Listening on Port 5000 ')
+            console.log('Listening on Port 3000 ')
         })
     })
     .catch((err) => {
