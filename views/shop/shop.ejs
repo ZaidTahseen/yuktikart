@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/shop.css">
+    <title>My Shop</title>
+    <style>
+        .add-btn{
+            width: 20px;
+        }
+    </style>
+    
+</head>
+
+<body>
+
+    <nav>
+        <ul id="nav-list">
+            <li class="list-item"><a href="/shop">Online Shop</a></li>
+            <li class="list-item"><a href="/shop/cart">Cart</a></li>
+            <li class="list-item"><a href="/admin">Admin</a></li>
+        </ul>
+    </nav>
+
+
+
+    <section id="products">
+
+        <% for (let product of prod) {  %>
+
+        <div class="card">
+            <h1 class="card-h"><%=  product.title  %></h1>
+            <img class="card-img" src="<%= product.imgUrl %>" alt="">
+            <h1 class="card-h">Price - <%= product.price %></h1>
+            <div class="card-btn">
+                <!-- <button class="btn-c">Add To Cart</button> -->
+
+                <form action="/shop/cart" method="post">
+                    <button class="" type="submit">Add to Cart</button>
+                    <input type="hidden" name="productId" value="<%= product._id %>">
+                </form>
+                <button class="btn-c">Detail</button>
+            </div>
+        </div>
+
+        <% } %>
+
+
+    </section>
+</body>
+
+</html>

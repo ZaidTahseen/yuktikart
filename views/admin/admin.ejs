@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="css/shop.css">
+    <style>
+        .del_btn {
+            width: 180px;
+            padding: 5px 0px;
+            background-color: gray;
+        }
+        .edit_btn{
+            border: 1px solid black;
+            padding: 2px 75px;
+            text-decoration: none;
+            color: black;
+            background-color: gray;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul id="nav-list">
+            <li class="list-item"><a href="/shop">Online Shop</a></li>
+            <li class="list-item"><a href="admin/add-product">Add Product</a></li>
+            <li class="list-item"><a href="#">Logout</a></li>
+        </ul>
+
+        <section id="products">
+
+            <% for (let product of prod) {  %>
+    
+            <div class="card">
+                <h1 class="card-h"><%=  product.title  %></h1>
+                <img class="card-img"
+                    src="<%= product.imgUrl %>"
+                    alt="">
+                <h1 class="card-h">Price - <%= product.price %></h1>
+                <div class="card-btn">
+                    <a href="/admin/edit-product/<%= product._id %>" class="edit_btn">Edit</a>
+
+                    <form action="/admin/delete-product" method="POST">
+                        <input type="hidden" value="<%= product._id %>" name="productId">
+                        <button class="del_btn" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+    
+            <% } %>
+    
+    
+        </section>
+
+    </nav>
+    
+</body>
+</html>
