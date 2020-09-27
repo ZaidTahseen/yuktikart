@@ -8,9 +8,9 @@ const shopController = require('../controller/shop');
 
 router.get('/' ,  shopController.getProducts) 
 
-router.post('/cart' ,  shopController.addcart) 
-
 router.get('/cart' ,  shopController.getcart) 
+
+router.post('/cart' ,  shopController.addcart) 
 
 router.post('/cart-delete-item', shopController.postCartDeleteProduct);
 

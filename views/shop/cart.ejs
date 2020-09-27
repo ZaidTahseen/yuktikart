@@ -81,8 +81,8 @@
 
     <nav>
         <ul id="cart-nav-list">
-            <li class="cart-list-item"><a href="/shop">Online Shop</a></li>
-            <li class="cart-list-item"><a href="#">Cart</a></li>
+            <li class="cart-list-item"><a href="/">Online Shop</a></li>
+            <li class="cart-list-item"><a href="/cart">Cart</a></li>
             <li class="cart-list-item"><a href="/admin">Admin</a></li>
         </ul>
     </nav>
@@ -100,7 +100,7 @@
 
                             <h2>Quantity: <%= p.quantity %></h2>
 
-                            <form action="/shop/cart-delete-item" method="POST">  
+                            <form action="/cart-delete-item" method="POST">  
                                 <input type="hidden" value="<%=  p.productId._id  %>" name="prod_Id">
                                 <button class="btn danger" type="submit">Delete</button>
                             </form>

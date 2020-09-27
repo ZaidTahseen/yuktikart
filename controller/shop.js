@@ -21,7 +21,7 @@ exports.addcart = (req, res) => {
             return req.user.addToCart(product);
         })
         .then(result => {
-            res.redirect('/shop');
+            res.redirect('/');
         });
 
 }
@@ -52,7 +52,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
     req.user
     .removeFromCart(prodId)
     .then(result => {
-      res.redirect('/shop/cart');
+      res.redirect('/cart');
     })
     .catch(err => console.log(err));
   };

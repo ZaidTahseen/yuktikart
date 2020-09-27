@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
-// const multer = require('multer');
+
 
 
 //Use body Parser in file
@@ -43,7 +43,6 @@ app.use((req, res, next) => {
     User.findById('5f6f5b1fed4a651ef0b35a92')
         .then(user => {
             req.user = user;
-            // console.log(req.user)
             next();
         })
         .catch(err => console.log(err));
@@ -53,7 +52,7 @@ app.use((req, res, next) => {
 
 
 
-app.use('/shop', shopRoutes)
+app.use('/', shopRoutes)
 app.use('/admin', adminRoutes)
 
 

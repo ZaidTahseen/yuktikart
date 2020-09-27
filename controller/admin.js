@@ -18,7 +18,6 @@ exports.createProduct = async (req, res) => {
     }
     const new_prod = new product.Product(prod)
     // saving in database 
-    console.log(new_prod)
     await new_prod.save()
     res.redirect('/admin')
 
