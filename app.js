@@ -1,92 +1,125 @@
+const path = require('path')
 const express = require('express')
-const app = express();
-const path = require('path');
-const bodyParser = require('body-parser');
+const app = express()
 const mongoose = require('mongoose')
+const session = require('express-session');
 
 
+require('./prod')(app)
 
-//Use body Parser in file
-app.use(bodyParser.urlencoded({ extended: false }));
-
-
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const User = require('./model/user');
 
 
+// const MONGODB_URI = 'mongodb://localhost/ishankart';
+const MONGODB_URI = 'mongodb+srv://Ishan:Gudmorning1@cluster0.vlyj4.mongodb.net/?<dbname>retryWrites=true&w=majority';
 
 
-// Setting ejs as a template engine for my project 
+// saving sessions 
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+});
+
+
+
+// Using body-Parser 
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Set template Engine (ejs) into my app 
 app.set('view engine', 'ejs');
+// The directory name of my ejs templates 
 app.set('views', 'views');
 
 
-// Set public folder to the entire app.js 
+
+
+// Make public folder availble to entire app 
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// app.use('/images', express.static(path.join(__dirname, 'images')));
+
+// Storing session in store of sessions collection 
+
+app.use(
+  session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+    store: store
+  })
+);
 
 
 
 
 
-// Importing shop routes from routes folder 
-const shopRoutes = require('./routes/shop.js')
-const adminRoutes = require('./routes/admin.js')
-
-// require('./prod')(app)
-
+//  Using Middleware  checking is there any session is availble 
 
 app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
 
-    User.findById('5f6f5b1fed4a651ef0b35a92')
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => console.log(err));
+  User.findById(req.session.user._id)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
 });
 
 
 
 
 
-app.use('/', shopRoutes)
-app.use('/admin', adminRoutes)
+
+// Importing all my routes 
+const shopRoutes = require('./routes/shop.js')
+const adminRoutes = require('./routes/admin.js')
+const authRoutes = require('./routes/auth')
 
 
 
-app.get('*', (req, res, next) => {
-    res.send('Routes Not match !!!!!!!!!')
-});
+// Using my all  Routes
+app.use(shopRoutes);
+app.use(adminRoutes);
+app.use(authRoutes);
 
 
-mongoose.connect('mongodb+srv://ekart:ekart123@cluster0.sibkp.mongodb.net/<dbname>?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true })
-    .then((result) => {
 
-        User.findOne().then(user => {
-            if (!user) {
-                const user = new User({
-                    name: 'Zaid',
-                    email: 'zaidazmi56@gmail.com',
-                    cart: {
-                        items: []
-                    }
-                });
+// wild route must use at last after using every route 
 
-                user.save();
-            }
-        });
+app.use('*', (req, res) => {
+  res.render('wild_route.ejs', { isAuthenticated: false  , user_name :  req.session.user_name})
+}) 
 
-        console.log('DB Connected')
-        const port = process.env.PORT || 3000;
-        app.listen(port, () => {
-            console.log('Listening on Port 3000 ')
-        })
+
+
+
+
+
+
+
+mongoose.connect(
+  MONGODB_URI,
+  { useUnifiedTopology: true, useNewUrlParser: true }
+)
+  .then(() => {
+
+    console.log('DB Connected')
+    const port = 3000
+    app.listen(port, () => {
+      console.log(`Listening on ${port} port !! `)
     })
-    .catch((err) => {
-        console.log(err.message)
-        console.log('DB Not connected !!!!  ')
-    })
 
+
+  })
+
+  .catch((err) => {
+    console.log(err)
+  })
